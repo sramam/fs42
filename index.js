@@ -16,7 +16,9 @@ async function main() {
 
   const program = new Command();
 
-  program.name(name).description(description).version(version);
+  program.name(name);
+  program.description(description);
+  program.version(version);
 
   program
     .command("merge")
