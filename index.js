@@ -22,7 +22,9 @@ async function main() {
 
   program
     .command("merge")
-    .description("Merge multiple files into a single file with markers")
+    .description(
+      "Merge multiple files into a single file with markers.\n NOTE: All paths must be relative to module root"
+    )
     .argument("<paths>", "Comma-separated list of files/directories to merge")
     .option("-i, --ignore <patterns>", "Comma-separated patterns to ignore", "")
     .option("-o, --output <file_path>", "Path to output file")
@@ -44,14 +46,27 @@ async function main() {
           rootDir,
         });
 
+        // pnpm was resolving this to project root.
+        const pwd = process.env.PWD;
+
+        // for (const el in process.env) {
+        //   console.log(el, process.env[el]);
+        // }
+        console.log({
+          "process.env.PWD": process.env.PWD,
+          "process.cwd()": process.cwd(),
+          pwd: pwd,
+          "options.cwd": options.cwd,
+          "options.rootDir": options.rootDir,
+        });
+
         if (options.output) {
-          const outPath = path.resolve(process.cwd(), options.output);
+          const outPath = path.resolve(pwd, options.output);
+          console.log(chalk.blue(`Writing merged file to ${outPath}`));
           await fs.mkdir(path.dirname(outPath), { recursive: true });
           await fs.writeFile(outPath, result);
           console.log(
-            chalk.green(
-              `Merged file written to ${path.relative(process.cwd(), outPath)}`
-            )
+            chalk.green(`Merged file written to ${path.relative(pwd, outPath)}`)
           );
         } else {
           process.stdout.write(result);
@@ -64,7 +79,9 @@ async function main() {
 
   program
     .command("split")
-    .description("Split a merged file back into individual files")
+    .description(
+      "Split a merged file back into individual files\n NOTE: All paths must be relative to module root"
+    )
     .argument("<outputDir>", "Directory to output split files")
     .argument("<mergeFile>", "File containing merged content")
     .action(async (outputDir, mergeFile) => {
