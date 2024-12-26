@@ -65,6 +65,7 @@ async function main() {
           process.stdout.write(result);
         }
       } catch (error) {
+        console.error(error);
         console.error(chalk.red("Error:"), error.message);
         process.exit(1);
       }

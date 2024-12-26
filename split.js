@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from 'fs/promises'
 import { dirname, join } from 'path'
 import chalk from 'chalk'
+import { printTree } from './tree.js'
 
 /**
  * Splits a merged file back into individual files
@@ -16,6 +17,7 @@ export async function splitFiles(outputDir, mergeFile) {
   
   console.log(chalk.blue('Processing files...'))
   
+  const sizes = {}
   for (const line of lines) {
     // Check for file marker (// >>> filepath)
     const match = line.match(/^\/\/\s*>>>\s*(.+)$/)
@@ -29,7 +31,8 @@ export async function splitFiles(outputDir, mergeFile) {
         const contentSize = (new TextEncoder().encode(currentContent.join('\n'))).length;
         const humanFriendlySize = (contentSize / 1024).toFixed(2) + ' KB';
         filesCreated++
-        console.log(chalk.gray(`Extracted: ${currentFile} (${humanFriendlySize})`))
+        // console.log(chalk.gray(`Extracted: ${currentFile} (${humanFriendlySize})`))
+        sizes[currentFile] = humanFriendlySize
       }
       
       // Start new file
@@ -49,9 +52,11 @@ export async function splitFiles(outputDir, mergeFile) {
     filesCreated++
     const contentSize = (new TextEncoder().encode(currentContent.join('\n'))).length;
     const humanFriendlySize = (contentSize / 1024).toFixed(2) + ' KB'; 
-    console.log(chalk.gray(`Extracted: ${currentFile} (${humanFriendlySize})`))
+    // console.log(chalk.gray(`Extracted: ${currentFile} (${humanFriendlySize})`))
+    sizes[currentFile] = humanFriendlySize
   }
-  
+
+  console.log(outputDir);
+  printTree(sizes);
   console.log(chalk.green(`\nFile splitting completed successfully!`))
-  console.log(chalk.green(`Total files created: ${filesCreated}`))
 }

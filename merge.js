@@ -3,6 +3,7 @@ import { join, relative, resolve } from 'path'
 import { glob } from 'glob'
 import ignore from 'ignore'
 import chalk from 'chalk'
+import { printTree } from './tree.js'
 
 /**
  * Merges multiple files into a single string with file markers
@@ -56,6 +57,7 @@ export async function mergeFiles(paths, options) {
   ].join("\n")
 
   
+  const sizes = {}
   for (const file of filteredFiles) {
     const relativePath = relative(rootDir, file)
     const content = await readFile(file, 'utf-8')
@@ -66,8 +68,8 @@ export async function mergeFiles(paths, options) {
     output += '\n'
     const contentSize = (new TextEncoder().encode(content)).length;
     const humanFriendlySize = (contentSize / 1024).toFixed(2) + ' KB';
-    console.log(chalk.gray(`Processed: ${relativePath} (${humanFriendlySize})`))
+    sizes[relativePath] = humanFriendlySize
   }
-  
+  printTree(sizes);
   return output
 }
