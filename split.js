@@ -26,8 +26,10 @@ export async function splitFiles(outputDir, mergeFile) {
         const fullPath = join(outputDir, currentFile)
         await mkdir(dirname(fullPath), { recursive: true })
         await writeFile(fullPath, currentContent.join('\n'))
+        const contentSize = (new TextEncoder().encode(currentContent.join('\n'))).length;
+        const humanFriendlySize = (contentSize / 1024).toFixed(2) + ' KB';
         filesCreated++
-        console.log(chalk.gray(`Extracted: ${currentFile}`))
+        console.log(chalk.gray(`Extracted: ${currentFile} (${humanFriendlySize})`))
       }
       
       // Start new file
@@ -45,7 +47,9 @@ export async function splitFiles(outputDir, mergeFile) {
     await mkdir(dirname(fullPath), { recursive: true })
     await writeFile(fullPath, currentContent.join('\n'))
     filesCreated++
-    console.log(chalk.gray(`Extracted: ${currentFile}`))
+    const contentSize = (new TextEncoder().encode(currentContent.join('\n'))).length;
+    const humanFriendlySize = (contentSize / 1024).toFixed(2) + ' KB'; 
+    console.log(chalk.gray(`Extracted: ${currentFile} (${humanFriendlySize})`))
   }
   
   console.log(chalk.green(`\nFile splitting completed successfully!`))

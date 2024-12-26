@@ -1,14 +1,19 @@
 # fs42
 
-When working with LLMs to write code, a common workflow is to concatenate a bunch
-of files to provide the LLM context and then splitting it's output back into files.
-
 fs42 is a simple tool to help merge/split files for LLM consumption.
+
+Currently (~Dec 2024) LLMs don't always handle large complex tasks well.
+They work best when given focussed features to implement. Working in a large
+codebase, this means collecting a bunch of files from different locations
+and marging them for LLM context. Importantly, on the return path, it
+also means splitting similar output into individual files.
+
+This module helps with doing this in both directions.
 
 ## Install
 
 ```
-pnpm add fs42
+pnpm add https://github.com/sramam/fs42
 ```
 
 ## Usage
