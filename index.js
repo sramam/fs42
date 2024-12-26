@@ -6,6 +6,7 @@ import { splitFiles } from "./split.js";
 import { resolve } from "path";
 import chalk from "chalk";
 import fs from "fs/promises";
+import path from "path";
 
 async function main() {
   const packageJsonPath = resolve("./package.json");
