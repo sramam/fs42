@@ -46,9 +46,13 @@ async function main() {
 
         if (options.output) {
           const outPath = path.resolve(rootDir, options.output);
-          await fs.mkdir(path.dirname(output), { recursive: true });
-          await fs.writeFile(output, result);
-          console.log(chalk.green(`Merged file written to ${options.output}`));
+          await fs.mkdir(path.dirname(outPath), { recursive: true });
+          await fs.writeFile(outPath, result);
+          console.log(
+            chalk.green(
+              `Merged file written to ${path.relative(process.cwd(), outPath)}`
+            )
+          );
         } else {
           process.stdout.write(result);
         }
