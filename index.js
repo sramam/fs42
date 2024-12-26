@@ -52,8 +52,14 @@ async function main() {
           const outPath = path.resolve(pwd, options.output);
           await fs.mkdir(path.dirname(outPath), { recursive: true });
           await fs.writeFile(outPath, result);
+          const humanFriendlySize = (result.length / 1024).toFixed(2) + " KB";
           console.log(
-            chalk.green(`Merged file written to ${path.relative(pwd, outPath)}`)
+            chalk.green(
+              `Merged file written to ${path.relative(
+                pwd,
+                outPath
+              )}, total: ${humanFriendlySize}`
+            )
           );
         } else {
           process.stdout.write(result);

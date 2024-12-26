@@ -57,11 +57,13 @@ export async function mergeFiles(paths, options) {
     const relativePath = relative(rootDir, file)
     const content = await readFile(file, 'utf-8')
     
-    output += `// >>> ${relativePath}\n`
+    output += `// >>> ${relativePath} \n`
     output += content
     if (!content.endsWith('\n')) output += '\n'
     output += '\n'
-    console.log(chalk.gray(`Processed: ${relativePath}`))
+    const contentSize = (new TextEncoder().encode(content)).length;
+    const humanFriendlySize = (contentSize / 1024).toFixed(2) + ' KB';
+    console.log(chalk.gray(`Processed: ${relativePath} (${humanFriendlySize})`))
   }
   
   return output
