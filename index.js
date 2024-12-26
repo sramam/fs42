@@ -45,7 +45,7 @@ async function main() {
         });
 
         if (options.output) {
-          const outPath = path.resolve(rootDir, options.output);
+          const outPath = path.resolve(process.cwd(), options.output);
           await fs.mkdir(path.dirname(outPath), { recursive: true });
           await fs.writeFile(outPath, result);
           console.log(
