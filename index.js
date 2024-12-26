@@ -48,6 +48,7 @@ async function main() {
         if (options.output) {
           await fs.mkdir(path.dirname(options.output), { recursive: true });
           await fs.writeFile(options.output, result);
+          console.log(chalk.green(`Merged file written to ${options.output}`));
         } else {
           process.stdout.write(result);
         }
