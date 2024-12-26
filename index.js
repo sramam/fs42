@@ -25,6 +25,7 @@ async function main() {
     .description("Merge multiple files into a single file with markers")
     .argument("<paths>", "Comma-separated list of files/directories to merge")
     .option("-i, --ignore <patterns>", "Comma-separated patterns to ignore", "")
+    .option("-o, --output <file_path>", "Path to output file")
     .option(
       "-r, --root-dir <dir>",
       "Root directory for relative paths",
@@ -43,7 +44,12 @@ async function main() {
           rootDir,
         });
 
-        process.stdout.write(result);
+        if (options.output) {
+          await fs.mkdir(path.dirname(options.output), { recursive: true });
+          await fs.writeFile(options.output, result);
+        } else {
+          process.stdout.write(result);
+        }
       } catch (error) {
         console.error(chalk.red("Error:"), error.message);
         process.exit(1);
