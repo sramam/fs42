@@ -46,23 +46,10 @@ async function main() {
           rootDir,
         });
 
-        // pnpm was resolving this to project root.
-        const pwd = process.env.PWD;
-
-        // for (const el in process.env) {
-        //   console.log(el, process.env[el]);
-        // }
-        console.log({
-          "process.env.PWD": process.env.PWD,
-          "process.cwd()": process.cwd(),
-          pwd: pwd,
-          "options.cwd": options.cwd,
-          "options.rootDir": options.rootDir,
-        });
-
         if (options.output) {
+          // this resolves to caller module root.
+          const pwd = process.env.PWD;
           const outPath = path.resolve(pwd, options.output);
-          console.log(chalk.blue(`Writing merged file to ${outPath}`));
           await fs.mkdir(path.dirname(outPath), { recursive: true });
           await fs.writeFile(outPath, result);
           console.log(
