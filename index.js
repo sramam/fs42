@@ -3,13 +3,12 @@
 import { Command } from "commander";
 import { mergeFiles } from "./merge.js";
 import { splitFiles } from "./split.js";
-import { resolve } from "path";
 import chalk from "chalk";
 import fs from "fs/promises";
 import path from "path";
 
 async function main() {
-  const packageJsonPath = resolve("./package.json");
+  const packageJsonPath = path.resolve("./package.json");
   const packageJsonData = JSON.parse(
     await fs.readFile(packageJsonPath, "utf-8")
   );
@@ -38,7 +37,7 @@ async function main() {
         const ignorePatterns = options.ignore
           ? options.ignore.split(",").map((p) => p.trim())
           : [];
-        const rootDir = resolve(options.rootDir);
+        const rootDir = path.resolve(options.rootDir);
 
         const result = await mergeFiles(pathList, {
           ignorePatterns,
@@ -46,8 +45,9 @@ async function main() {
         });
 
         if (options.output) {
-          await fs.mkdir(path.dirname(options.output), { recursive: true });
-          await fs.writeFile(options.output, result);
+          const outPath = path.resolve(rootDir, options.output);
+          await fs.mkdir(path.dirname(output), { recursive: true });
+          await fs.writeFile(output, result);
           console.log(chalk.green(`Merged file written to ${options.output}`));
         } else {
           process.stdout.write(result);
