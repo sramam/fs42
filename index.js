@@ -5,7 +5,7 @@ import { mergeFiles } from './merge.js'
 import { splitFiles } from './split.js'
 import { resolve } from 'path'
 import chalk from 'chalk'
-import { name, version, description } from './package.json'
+import { name, version, description } from './package.json' assert { type: 'json' };
 
 const program = new Command()
 
