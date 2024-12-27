@@ -7,7 +7,7 @@ import { printTree } from './tree.js'
  * Splits a merged file back into individual files
  */
 export async function splitFiles(outputDir, mergeFile) {
-  console.log(chalk.blue('Reading merged file...'))
+  console.log(chalk.blue(`Reading merged file... ${mergeFile}`))
   const content = await readFile(mergeFile, 'utf-8')
   const lines = content.split('\n')
   

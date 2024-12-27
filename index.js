@@ -6,9 +6,12 @@ import { splitFiles } from "./split.js";
 import chalk from "chalk";
 import fs from "fs/promises";
 import path from "path";
+import { fileURLToPath } from "url";
 
 async function main() {
-  const packageJsonPath = path.resolve("./package.json");
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  const packageJsonPath = path.resolve(`${__dirname}/package.json`);
   const packageJsonData = JSON.parse(
     await fs.readFile(packageJsonPath, "utf-8")
   );
@@ -65,8 +68,8 @@ async function main() {
           process.stdout.write(result);
         }
       } catch (error) {
-        console.error(error);
         console.error(chalk.red("Error:"), error.message);
+        console.error(error);
         process.exit(1);
       }
     });
@@ -76,13 +79,14 @@ async function main() {
     .description(
       "Split a merged file back into individual files\n NOTE: All paths must be relative to module root"
     )
-    .argument("<outputDir>", "Directory to output split files")
     .argument("<mergeFile>", "File containing merged content")
+    .argument("<outputDir>", "Directory to output split files")
     .action(async (outputDir, mergeFile) => {
       try {
         await splitFiles(outputDir, mergeFile);
       } catch (error) {
         console.error(chalk.red("Error:"), error.message);
+        console.error(error);
         process.exit(1);
       }
     });
